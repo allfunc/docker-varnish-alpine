@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  varnish:
+    image: hillliu/varnish-alpine 
+    restart: always
+    environment:
+      - VARNISH_BACKEND_ADDRESS=${VARNISH_BACKEND_ADDRESS}
+      - VARNISH_BACKEND_PORT=${VARNISH_BACKEND_PORT} 
+    ports:
+      - ${VARNISH_PORT}:80
+
