@@ -25,11 +25,10 @@ jobs:
       - run:
           name: build Docker image
           command: |
-            VERSION=$(support/VERSION.sh)
             IMAGE_NAME=$(support/targetImage.sh)
             BUILD_VERSION=<< parameters.docker-tag >>
             BUILD_FOLDER="./"
-            BUILD_ARG=""
+            BUILD_ARG="--build-arg VERSION=${BUILD_VERSION}"
             docker build ${BUILD_ARG} -f ${BUILD_FOLDER}/Dockerfile \
               -t $IMAGE_NAME:${BUILD_VERSION} \
               ${BUILD_FOLDER}
