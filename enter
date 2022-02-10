@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+DIR="$(
+  cd "$(dirname "$0")"
+  pwd -P
+)"
+VERSION=${VERSION:-latest}
+SOURCE_IMAGE=$(${DIR}/support/sourceImage.sh)
+
+C=''
+for i in "$@"; do
+  i="${i//\\/\\\\}"
+  C="$C \"${i//\"/\\\"}\""
+done
+
+pid=$$
+
+cli='env docker run --rm -it'
+cli+=" --entrypoint sh"
+cli+=" --name ${SOURCE_IMAGE}-${pid} ${SOURCE_IMAGE}:${VERSION}"
+cli+=" ${C}"
+
+bash -c "$cli"
