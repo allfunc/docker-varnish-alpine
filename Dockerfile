@@ -1,19 +1,22 @@
-FROM alpine:3.15
-
 ARG VERSION=${VERSION:-[VERSION]}
 
-ENV VARNISH_BACKEND_ADDRESS 0.0.0.0 
-ENV VARNISH_MEMORY 100M
-ENV VARNISH_BACKEND_PORT 80
-EXPOSE 80
+FROM alpine:3.16
 
-# COPY patches/* /varnish-alpine-patches/
+ARG VERSION
 
-COPY ./install-packages.sh /usr/local/bin/
+# apk
+COPY ./install-packages.sh /usr/local/bin/install-packages
 RUN apk update && apk add bash bc \
-  && INSTALL_VERSION=$VERSION install-packages.sh \
-  && rm /usr/local/bin/install-packages.sh
+  && INSTALL_VERSION=$VERSION install-packages \
+  && rm /usr/local/bin/install-packages;
 
+ENV VARNISH_BACKEND_ADDRESS=0.0.0.0 \
+    VARNISH_MEMORY=100M \
+    VARNISH_BACKEND_PORT=80
+
+EXPOSE 80
 WORKDIR /app
-COPY ./entrypoint.sh ./
-CMD ["/app/entrypoint.sh"]
+
+COPY ./docker/entrypoint.sh /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]
+CMD ["server"]

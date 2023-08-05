@@ -1,0 +1,5 @@
+repositoryName=docker-varnish-alpine
+repositoryOrgName=allfunc
+dockerImageName=varnish-alpine
+dockerOrgName=allfunc
+terratest=allfunc/terratest
